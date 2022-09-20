@@ -17,8 +17,8 @@ st.title("Recommendation API")
 user_record = pd.read_csv('user_selection_record.csv')
 import github
 
-g = github.Github(token)
-# or  g = github.Github('gupta.palak@miko2.ai', 'Miko@1488')
+# g = github.Github(token)
+g = github.Github('gupta.palak@miko2.ai', 'Miko@1488')
 
 repo = g.get_user().get_repo("RecommendationAPI")
 file = repo.get_file_contents("user_selection_record.csv")
