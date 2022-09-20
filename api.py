@@ -10,19 +10,17 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 import sqlite3 as dbsql
 from recommendation import content_filtering, collaborative_filtering, le_bot, le_app, ops, OR_ops
+import gspread
 
 #Title
 st.title("Recommendation API")
 
-user_record = pd.read_csv('user_selection_record.csv')
-from github import Github
+# user_record = pd.read_csv('user_selection_record.csv')
 
-# g = github.Github(token)
-g = Github('gupta.palak@miko2.ai', 'Miko@1488')
+sa = gspread.service_account()
+sh = sa.open('user_selection_record')
+wks = sh[0]
 
-repo = g.get_user().get_repo("https://github.com/PalakMiko/RecommendationAPI")
-file = repo.get_file_contents("user_selection_record.csv")
-st.write(file)
 
 
 #Function to read datasets
@@ -98,8 +96,9 @@ def data_processing(count_data, app_data, selected_bot):
     
 
 def on_click_function(model_version, label, selected_user, recommendations):
-    user_record.loc[len(user_record.index)] = [model_version, selected_user, label, recommendations]
-    user_record.to_csv("user_selection_record.csv", index=False)
+#     user_record.loc[len(user_record.index)] = [model_version, selected_user, label, recommendations]
+#     user_record.to_csv("user_selection_record.csv", index=False)
+    wks.insert_rows(row = wks.row_count+1, number=1, values = [model_version, selected_user, label, recommendations])
 
 selected_user = st.selectbox('Select Bot ID', ['None']+ list(set(count_data['Bot Number'])))
 collab_weight = st.text_input("Enter Collab Weight: ","0.5")
