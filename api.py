@@ -14,7 +14,7 @@ from recommendation import content_filtering, collaborative_filtering, le_bot, l
 #Title
 st.title("Recommendation API")
 
-user_record = pd.read_csv('https://github.com/PalakMiko/RecommendationAPI/edit/main/user_selection_record.csv')
+user_record = pd.read_csv('user_selection_record.csv')
 
 #Function to read datasets
 def read_data():
