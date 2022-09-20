@@ -98,7 +98,7 @@ def data_processing(count_data, app_data, selected_bot):
 def on_click_function(model_version, label, selected_user, recommendations):
 #     user_record.loc[len(user_record.index)] = [model_version, selected_user, label, recommendations]
 #     user_record.to_csv("user_selection_record.csv", index=False)
-    wks.insert_rows(row = wks.row_count+1, number=1, values = [model_version, selected_user, label, recommendations])
+    wks.append_row([model_version, selected_user, label, recommendations])
 
 selected_user = st.selectbox('Select Bot ID', ['None']+ list(set(count_data['Bot Number'])))
 collab_weight = st.text_input("Enter Collab Weight: ","0.5")
