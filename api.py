@@ -2,9 +2,6 @@
 model_version = 'v3'
 
 #Libraries
-import pickle
-from re import S
-from turtle import onclick
 import streamlit as st
 import pandas as pd
 import numpy as np
