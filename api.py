@@ -19,7 +19,7 @@ st.title("Recommendation API")
 
 sa = gspread.service_account('recommendation-api-363118-46846431ca85.json')
 sh = sa.open('user_selection_record')
-wks = sh[0]
+wks = sh.worksheet("Sheet1")
 
 
 
