@@ -14,7 +14,7 @@ from recommendation import content_filtering, collaborative_filtering, le_bot, l
 #Title
 st.title("Recommendation API")
 
-user_record = pd.read_csv('user_selection_record.csv')
+user_record = pd.read_csv('https://github.com/PalakMiko/RecommendationAPI/edit/main/user_selection_record.csv')
 
 #Function to read datasets
 def read_data():
@@ -93,8 +93,8 @@ def on_click_function(model_version, label, selected_user, recommendations):
     user_record.to_csv("user_selection_record.csv", index=False)
 
 selected_user = st.selectbox('Select Bot ID', ['None']+ list(set(count_data['Bot Number'])))
-collab_weight = st.text_input("Enter Collab Weight: ")
-content_weight = st.text_input("Enter Content Weight: ")
+collab_weight = st.text_input("Enter Collab Weight: ","0.5")
+content_weight = st.text_input("Enter Content Weight: ", "0.5")
 
 print("Selected bot", selected_user)
 if selected_user!="None" and collab_weight and content_weight:
