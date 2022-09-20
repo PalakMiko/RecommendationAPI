@@ -17,7 +17,7 @@ st.title("Recommendation API")
 
 # user_record = pd.read_csv('user_selection_record.csv')
 
-sa = gspread.service_account()
+sa = gspread.service_account('recommendation-api-363118-46846431ca85')
 sh = sa.open('user_selection_record')
 wks = sh[0]
 
