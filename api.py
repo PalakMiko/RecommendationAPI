@@ -20,7 +20,7 @@ from github import Github
 # g = github.Github(token)
 g = Github('gupta.palak@miko2.ai', 'Miko@1488')
 
-repo = g.get_user().get_repo("https://github.com/PalakMiko/RecommendationAPI/RecommendationAPI")
+repo = g.get_user().get_repo("https://github.com/PalakMiko/RecommendationAPI")
 file = repo.get_file_contents("user_selection_record.csv")
 st.write(file)
 
