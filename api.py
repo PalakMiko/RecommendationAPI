@@ -183,8 +183,11 @@ if selected_user!="None" and collab_weight and content_weight:
     st.markdown("_________________________________________________________________")
 
     row = wks.row_count
-    user_rating = st.text_input("Rate the recommendations (1-5):", "1")  
-    user_comment = st.text_area("Write your comment", "No comments!")
+    col1, col2 = st.columns([1,1])
+    with col1:
+        user_rating = st.text_input("Rate the recommendations (1-5):", "1")  
+    with col2:
+        user_comment = st.text_area("Write your comment", "No comments!")
 
     if st.button("Submit"):
         wks.update(f'G{row}', int(user_rating))
