@@ -1,4 +1,3 @@
-
 #Specify the model version
 model_version = 'v3'
 
@@ -21,7 +20,6 @@ st.title("Recommendation API")
 sa = gspread.service_account('recommendation-api-363118-46846431ca85.json')
 sh = sa.open('user_selection_record')
 wks = sh.worksheet("Sheet1")
-
 
 
 #Function to read datasets
@@ -65,7 +63,7 @@ def data_processing(count_data, app_data, selected_bot):
     # #plotting
     # #individual bot data
     bot_data = count_data[count_data['Bot Number']==selected_bot]
-    print(bot_data)
+
     # #converting to plot
     bot_data.Count = bot_data.Count/sum(bot_data.Count.to_list())
     bot_data.Count = bot_data.Count*100
@@ -90,52 +88,51 @@ def data_processing(count_data, app_data, selected_bot):
     # if len(selected_app)>=2:
     #     selected_app = selected_app.sort_values('Count', ascending=False)
     #     selected_app = selected_app['App Name'].to_list()[:2]
-    
-    
+      
     st.plotly_chart(fig)
     return selected_app
     
 
-def on_click_function(model_version, label, selected_user, recommendations):
-#     user_record.loc[len(user_record.index)] = [model_version, selected_user, label, recommendations]
-#     user_record.to_csv("user_selection_record.csv", index=False)
-    wks.append_row([model_version, selected_user, label, recommendations])
+#Button functions
+def on_click_function(model_version, label, selected_user, recommendations, 
+                      content_weight, collab_weight):
+    wks.append_row([model_version, selected_user, label, 
+                    recommendations,content_weight, collab_weight])
 
+def user_feedback(response):
+    user_feedback = response
+
+           
+####################################################################################################3
 selected_user = st.selectbox('Select Bot ID', ['None']+ list(set(count_data['Bot Number'])))
 collab_weight = st.text_input("Enter Collab Weight: ","0.5")
 content_weight = st.text_input("Enter Content Weight: ", "0.5")
 
-print("Selected bot", selected_user)
 if selected_user!="None" and collab_weight and content_weight:
     selected_app = data_processing(count_data=count_data, app_data=app_data, selected_bot=selected_user)
- 
-    
-    # selected_app = list(le_app.classes_)[int(selected_app)]
+  
     if len(selected_app)>1:
         feature_map = OR_ops(list(le_app.classes_)[int(selected_app[0])], list(le_app.classes_)[int(selected_app[1])])
-       
         content_reco = content_filtering(feature_map)
     else:
-        print(selected_app)
         feature_map = ops(list(le_app.classes_)[int(selected_app.to_list()[0])])
-        
         content_reco =  content_filtering(feature_map)
     
     selected_user = list(le_bot.classes_).index(selected_user)
-    print(selected_user)
     collab_reco = collaborative_filtering(selected_user)
         
     collab_reco.Coll_Scores = collab_reco.Coll_Scores/sum(collab_reco.Coll_Scores.to_list())
-    
     content_reco.Cont_Scores = content_reco.Cont_Scores/sum(content_reco.Cont_Scores.to_list())
     
-    print(sum(content_reco.sort_values('Cont_Scores', ascending=False)['Cont_Scores'].to_list()))
-    
+
     st.write("Content Based Recommendation", 
             content_reco.sort_values('Cont_Scores', ascending =False)['AppNames'][:5].to_list())
+
     st.write("Collaborative Filtering Based Recommendation", 
             collab_reco.sort_values('Coll_Scores', ascending =False)['AppNames'][:5].to_list())
+    
 
+        
     #below LOCs are for hybrid recommendation
     hybrid_df = content_reco.merge(collab_reco, on='AppNames', how='left')
     hybrid_df = hybrid_df.fillna(0)
@@ -150,19 +147,25 @@ if selected_user!="None" and collab_weight and content_weight:
     st.write("Top '{}' Hybrid recommendations of Apps: ".format(num_recommendation))
     hybrid_recomm = hybrid_df['AppNames'].to_list()
     
+    user_feedback = 'No feedback!'
+    user_comment = 'No comments!'
+    
+
+    
     col1, col2, col3, col4, col5 = st.columns([1,1,1,1,1])
     cols = [col1, col2, col3, col4, col5]
     for i in range(5):
         with cols[i]:
             label = hybrid_recomm[i]
             st.button(label, on_click = on_click_function, 
-                      args=[model_version, label, list(le_bot.classes_)[selected_user], str(hybrid_recomm)])
-            
-
+                      args=[model_version, label, list(le_bot.classes_)[selected_user], str(hybrid_recomm),
+                            content_weight, collab_weight])
+    
+        
     st.markdown("_________________________________________________________________")
     st.write("Rest Hybrid recommendations of Apps: ")
     hybrid_recomm = hybrid_df['AppNames'].to_list()
-    
+        
     col1, col2, col3, col4, col5 = st.columns([1,1,1,1,1])
     cols = [col1, col2, col3, col4, col5]
     c = 0
@@ -175,4 +178,18 @@ if selected_user!="None" and collab_weight and content_weight:
         if c==5:
             c=0
         
-   
+# st.write(wks.row_count)
+st.text('')
+st.markdown("_________________________________________________________________")
+
+row = wks.row_count
+user_feedback = st.selectbox(
+    'Do you find this useful?',
+    ('No feedback yet!', 'Yes', 'No'))  
+user_comment = st.text_area("Write your comment", "No comments!")
+
+if st.button("Submit"):
+    wks.update(f'G{row}', user_feedback)
+    wks.update(f'H{row}', user_comment)
+    wks.update('H1', 'user_comment')
+    wks.update('G1', 'user_feedback')
