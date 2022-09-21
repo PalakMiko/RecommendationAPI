@@ -138,9 +138,9 @@ if selected_user!="None" and collab_weight and content_weight:
     
     col1, col2 = st.columns([.5,1])
     with col1:
-        st.button("Yes", key='contresponse', on_click = on_click_contfeedback, args = ["Yes"])
+        st.button("Yes", key='contresponseyes', on_click = on_click_contfeedback, args = ["Yes"])
     with col2:
-        st.button("No", key='contresponse', on_click = on_click_contfeedback, args = ["No"])
+        st.button("No", key='contresponseno', on_click = on_click_contfeedback, args = ["No"])
        
         
     st.write("Collaborative Filtering Based Recommendation", 
@@ -151,9 +151,9 @@ if selected_user!="None" and collab_weight and content_weight:
     
     col1, col2 = st.columns([.5,1])
     with col1:
-        st.button("Yes", key='collabresponse', on_click = on_click_collfeedback, args = ["Yes"])
+        st.button("Yes", key='collabresponseyes', on_click = on_click_collfeedback, args = ["Yes"])
     with col2:
-        st.button("No", key='collabresponse', on_click = on_click_collfeedback, args = ["No"])
+        st.button("No", key='collabresponseno', on_click = on_click_collfeedback, args = ["No"])
      
     #below LOCs are for hybrid recommendation
     hybrid_df = content_reco.merge(collab_reco, on='AppNames', how='left')
