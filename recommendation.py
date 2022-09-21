@@ -67,11 +67,11 @@ def content_filtering(feature_map):
 #function for collaborative recommendation
 def collaborative_filtering(selected_user):
     
-    f = open('Dataset/pmatrix.txt', 'r')
+    f = open('Dataset/pnnewmatrix.txt', 'r')
     P = np.array(json.loads(f.read()))
     f.close()
 
-    f = open('Dataset/qmatrix.txt', 'r')
+    f = open('Dataset/qnnewmatrix.txt', 'r')
     Q = np.array(json.loads(f.read()))
     f.close()
     
