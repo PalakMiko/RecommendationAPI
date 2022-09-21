@@ -147,7 +147,7 @@ if selected_user!="None" and collab_weight and content_weight:
     st.write("Top '{}' Hybrid recommendations of Apps: ".format(num_recommendation))
     hybrid_recomm = hybrid_df['AppNames'].to_list()
     
-    user_feedback = 'No feedback!'
+    user_rating = 1
     user_comment = 'No comments!'
     
 
@@ -183,13 +183,11 @@ if selected_user!="None" and collab_weight and content_weight:
     st.markdown("_________________________________________________________________")
 
     row = wks.row_count
-    user_feedback = st.selectbox(
-        'Do you find this useful?',
-        ('No feedback yet!', 'Yes', 'No'))  
+    user_rating = st.text_input("Rate the recommendations (1-5):", "1")  
     user_comment = st.text_area("Write your comment", "No comments!")
 
     if st.button("Submit"):
-        wks.update(f'G{row}', user_feedback)
+        wks.update(f'G{row}', int(user_rating))
         wks.update(f'H{row}', user_comment)
         wks.update('H1', 'user_comment')
-        wks.update('G1', 'user_feedback')
+        wks.update('G1', 'user_rating')
