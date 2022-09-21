@@ -136,7 +136,7 @@ if selected_user!="None" and collab_weight and content_weight:
     st.write("Do you find this useful?")
     content_response = 'No response yet!'
     
-    col1, col2 = st.beta_columns([.5,1])
+    col1, col2 = st.columns([.5,1])
     with col1:
         st.button("Yes", key='contresponse', on_click = on_click_contfeedback, args = ["Yes"])
     with col2:
@@ -149,7 +149,7 @@ if selected_user!="None" and collab_weight and content_weight:
     st.write("Do you find this useful?")
     collaborative_response = 'No response yet!'
     
-    col1, col2 = st.beta_columns([.5,1])
+    col1, col2 = st.columns([.5,1])
     with col1:
         st.button("Yes", key='collabresponse', on_click = on_click_collfeedback, args = ["Yes"])
     with col2:
