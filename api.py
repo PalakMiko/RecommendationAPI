@@ -178,18 +178,18 @@ if selected_user!="None" and collab_weight and content_weight:
         if c==5:
             c=0
         
-# st.write(wks.row_count)
-st.text('')
-st.markdown("_________________________________________________________________")
+    # st.write(wks.row_count)
+    st.text('')
+    st.markdown("_________________________________________________________________")
 
-row = wks.row_count
-user_feedback = st.selectbox(
-    'Do you find this useful?',
-    ('No feedback yet!', 'Yes', 'No'))  
-user_comment = st.text_area("Write your comment", "No comments!")
+    row = wks.row_count
+    user_feedback = st.selectbox(
+        'Do you find this useful?',
+        ('No feedback yet!', 'Yes', 'No'))  
+    user_comment = st.text_area("Write your comment", "No comments!")
 
-if st.button("Submit"):
-    wks.update(f'G{row}', user_feedback)
-    wks.update(f'H{row}', user_comment)
-    wks.update('H1', 'user_comment')
-    wks.update('G1', 'user_feedback')
+    if st.button("Submit"):
+        wks.update(f'G{row}', user_feedback)
+        wks.update(f'H{row}', user_comment)
+        wks.update('H1', 'user_comment')
+        wks.update('G1', 'user_feedback')
